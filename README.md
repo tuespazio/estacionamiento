@@ -1,51 +1,40 @@
-# Sistema de control de estacionamiento vecinal
+# Estacionamiento vecinal
 
-Aplicación web construida con Node.js y Express para administrar vecinos, vehículos y pagos de un estacionamiento comunitario. Incluye un panel administrativo para el registro de información y un portal público para que cada vecino consulte su estado.
+Aplicación web sencilla para administrar el control de un estacionamiento de vecinos. Permite:
+
+- Dar de alta y baja vecinos con su información básica.
+- Administrar los vehículos registrados para cada vecino.
+- Registrar pagos en efectivo o depósito, incluyendo comprobantes.
+- Brindar un portal para que los vecinos consulten su información.
 
 ## Requisitos
 
-- Node.js 18 o superior
-- npm 9 o superior
+- Python 3.10+
+- Dependencias listadas en `requirements.txt`
 
-## Configuración inicial
-
-1. Instala las dependencias del proyecto:
-   ```bash
-   npm install
-   ```
-2. Crea la estructura de directorios para archivos cargados (se genera automáticamente al iniciar, pero puedes crearla manualmente si lo prefieres):
-   ```bash
-   mkdir -p static/uploads
-   ```
-3. Opcional: define una variable de entorno `SESSION_SECRET` para asegurar las sesiones.
-
-## Ejecución
-
-Inicia el servidor en modo desarrollo:
+Instala las dependencias con:
 
 ```bash
-npm start
+pip install -r requirements.txt
 ```
 
-La aplicación quedará disponible en `http://localhost:3000`.
+## Uso
 
-Al ejecutarse por primera vez se crea automáticamente la base de datos SQLite `parking.db` con las tablas necesarias.
+Inicializa la base de datos (sólo la primera vez):
 
-## Estructura principal
+```bash
+flask --app app init-db
+```
 
-- `app.js`: servidor Express, rutas y lógica de negocio.
-- `views/`: plantillas EJS para el panel administrativo y el portal de vecinos.
-- `static/`: estilos compartidos y archivos subidos (en `static/uploads`).
-- `parking.db`: base de datos SQLite generada automáticamente.
+Arranca la aplicación en modo desarrollo:
 
-## Funcionalidades clave
+```bash
+flask --app app run --debug
+```
 
-- Alta, consulta y baja de vecinos con nombre, apellido y domicilio.
-- Administración de vehículos asociados a cada vecino (placas, marca, modelo y número de control).
-- Registro de pagos en efectivo o depósito con posibilidad de adjuntar comprobantes.
-- Portal para que los vecinos consulten sus vehículos registrados y el historial de pagos.
+La aplicación estará disponible en `http://127.0.0.1:5000`.
 
-## Notas
+- Panel administrativo: `http://127.0.0.1:5000/admin/users`
+- Portal de vecinos: `http://127.0.0.1:5000/portal`
 
-- Los archivos adjuntos de comprobantes se almacenan en `static/uploads/` y se eliminan al borrar el pago correspondiente o el vecino asociado.
-- Las relaciones entre vecinos, vehículos y pagos están protegidas con llaves foráneas para mantener la integridad de la información.
+Los comprobantes de depósitos se almacenan en la carpeta `static/uploads`.

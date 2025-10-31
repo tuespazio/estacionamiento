@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Resumen de {{ neighbor.first_name }} {{ neighbor.last_name }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="h4 mb-0">{{ neighbor.first_name }} {{ neighbor.last_name }}</h1>
+      <a class="btn btn-link" href="{{ url_for('portal_search') }}">← Buscar otro vecino</a>
+    </div>
+    <p class="text-muted">Domicilio: {{ neighbor.address }}</p>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header">Vehículos registrados</div>
+          <div class="card-body">
+            {% if neighbor.vehicles %}
+            <ul class="list-group list-group-flush">
+              {% for vehicle in neighbor.vehicles %}
+              <li class="list-group-item">
+                <div class="fw-bold">{{ vehicle.license_plate }}</div>
+                <div>{{ vehicle.make }} {{ vehicle.model }}</div>
+                <small class="text-muted">Núm. control: {{ vehicle.control_number }}</small>
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted mb-0">No hay vehículos asociados.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header">Historial de pagos</div>
+          <div class="card-body">
+            {% if payments %}
+            <ul class="list-group list-group-flush">
+              {% for payment in payments %}
+              <li class="list-group-item">
+                <div class="d-flex justify-content-between">
+                  <span>{{ payment.created_at.strftime('%d/%m/%Y') }}</span>
+                  <span class="fw-bold">${{ '%.2f'|format(payment.amount) }}</span>
+                </div>
+                <div class="text-muted">{{ payment.method }}</div>
+                {% if payment.deposit_account %}
+                <div class="text-muted">Cuenta: {{ payment.deposit_account }}</div>
+                {% endif %}
+                {% if payment.screenshot_path %}
+                <div>
+                  <a
+                    class="small"
+                    href="{{ url_for('uploaded_file', filename=payment.screenshot_path) }}"
+                    target="_blank"
+                    >Ver comprobante</a
+                  >
+                </div>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-muted mb-0">Sin pagos registrados.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
