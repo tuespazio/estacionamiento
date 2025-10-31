@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Portal de vecinos{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card mb-4">
+      <div class="card-body">
+        <h1 class="h4 mb-3">Consulta tu información</h1>
+        <p class="text-muted">
+          Ingresa tu nombre, apellido o domicilio para localizar tu registro.
+        </p>
+        <form method="post" class="row g-2">
+          <div class="col-12 col-md-9">
+            <input
+              class="form-control"
+              name="query"
+              placeholder="Buscar..."
+              value="{{ query }}"
+              required
+            />
+          </div>
+          <div class="col-12 col-md-3 d-grid">
+            <button class="btn btn-primary" type="submit">Buscar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {% if neighbors %}
+    <div class="list-group">
+      {% for neighbor in neighbors %}
+      <a
+        class="list-group-item list-group-item-action"
+        href="{{ url_for('portal_detail', neighbor_id=neighbor.id) }}"
+      >
+        <div class="d-flex w-100 justify-content-between">
+          <h2 class="h5 mb-1">{{ neighbor.first_name }} {{ neighbor.last_name }}</h2>
+          <small>ID {{ neighbor.id }}</small>
+        </div>
+        <p class="mb-1">{{ neighbor.address }}</p>
+        <small>{{ neighbor.vehicles|length }} vehículo(s) registrado(s)</small>
+      </a>
+      {% endfor %}
+    </div>
+    {% elif query %}
+    <div class="alert alert-warning">No se encontraron resultados para "{{ query }}".</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
