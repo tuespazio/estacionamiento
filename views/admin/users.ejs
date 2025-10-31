@@ -1,0 +1,68 @@
+<%- include('../partials/header', { title }) %>
+<div class="row">
+  <div class="col-lg-5 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Alta de vecino</div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label" for="first_name">Nombre</label>
+            <input class="form-control" id="first_name" name="first_name" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="last_name">Apellido</label>
+            <input class="form-control" id="last_name" name="last_name" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="address">Domicilio</label>
+            <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Vecinos registrados</div>
+      <div class="card-body">
+        <% if (neighbors && neighbors.length) { %>
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Domicilio</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% neighbors.forEach((neighbor) => { %>
+                  <tr>
+                    <td><%= neighbor.first_name %> <%= neighbor.last_name %></td>
+                    <td><%= neighbor.address %></td>
+                    <td class="text-nowrap">
+                      <a class="btn btn-sm btn-outline-secondary" href="/admin/users/<%= neighbor.id %>/vehicles">Vehículos</a>
+                      <a class="btn btn-sm btn-outline-secondary" href="/admin/users/<%= neighbor.id %>/payments">Pagos</a>
+                      <form
+                        class="d-inline"
+                        method="post"
+                        action="/admin/users/<%= neighbor.id %>/delete"
+                        onsubmit="return confirm('¿Eliminar este registro?');"
+                      >
+                        <button class="btn btn-sm btn-danger" type="submit">Baja</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-muted mb-0">No hay vecinos registrados.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

@@ -1,0 +1,90 @@
+<%- include('../partials/header', { title }) %>
+<div class="mb-4">
+  <a class="btn btn-link" href="/admin/users">← Volver a vecinos</a>
+</div>
+<div class="row">
+  <div class="col-lg-5 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Registrar pago</div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label" for="method">Método</label>
+            <select class="form-select" id="method" name="method" required>
+              <option value="">Selecciona una opción</option>
+              <option value="Efectivo">Efectivo</option>
+              <option value="Depósito">Depósito</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="amount">Monto</label>
+            <input class="form-control" id="amount" name="amount" type="number" step="0.01" min="0" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="deposit_account">Cuenta destino (depósito)</label>
+            <input class="form-control" id="deposit_account" name="deposit_account" />
+            <div class="form-text">Sólo requerido si el pago fue mediante depósito.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="screenshot">Comprobante</label>
+            <input class="form-control" id="screenshot" name="screenshot" type="file" />
+            <div class="form-text">Archivos permitidos: png, jpg, jpeg, gif y pdf.</div>
+          </div>
+          <button class="btn btn-primary" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Pagos registrados</div>
+      <div class="card-body">
+        <% if (payments && payments.length) { %>
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Método</th>
+                  <th>Monto</th>
+                  <th>Cuenta depósito</th>
+                  <th>Comprobante</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% payments.forEach((payment) => { %>
+                  <tr>
+                    <td><%= payment.formattedDate %></td>
+                    <td><%= payment.method %></td>
+                    <td><%= payment.formattedAmount %></td>
+                    <td><%= payment.deposit_account || '—' %></td>
+                    <td>
+                      <% if (payment.screenshot_path) { %>
+                        <a href="/uploads/<%= payment.screenshot_path %>" target="_blank">Ver archivo</a>
+                      <% } else { %>
+                        <span class="text-muted">No adjunto</span>
+                      <% } %>
+                    </td>
+                    <td class="text-end">
+                      <form
+                        method="post"
+                        action="/admin/users/<%= neighbor.id %>/payments/<%= payment.id %>/delete"
+                        onsubmit="return confirm('¿Eliminar este pago?');"
+                      >
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-muted mb-0">No hay pagos registrados.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

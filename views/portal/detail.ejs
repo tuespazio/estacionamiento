@@ -1,0 +1,64 @@
+<%- include('../partials/header', { title }) %>
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h1 class="h4 mb-0"><%= neighbor.first_name %> <%= neighbor.last_name %></h1>
+      <a class="btn btn-link" href="/portal">← Buscar otro vecino</a>
+    </div>
+    <p class="text-muted">Domicilio: <%= neighbor.address %></p>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header">Vehículos registrados</div>
+          <div class="card-body">
+            <% if (vehicles && vehicles.length) { %>
+              <ul class="list-group list-group-flush">
+                <% vehicles.forEach((vehicle) => { %>
+                  <li class="list-group-item">
+                    <div class="fw-bold"><%= vehicle.license_plate %></div>
+                    <div><%= vehicle.make %> <%= vehicle.model %></div>
+                    <small class="text-muted">Núm. control: <%= vehicle.control_number %></small>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p class="text-muted mb-0">No hay vehículos asociados.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header">Historial de pagos</div>
+          <div class="card-body">
+            <% if (payments && payments.length) { %>
+              <ul class="list-group list-group-flush">
+                <% payments.forEach((payment) => { %>
+                  <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <span><%= payment.formattedDate %></span>
+                      <span class="fw-bold"><%= payment.formattedAmount %></span>
+                    </div>
+                    <div class="text-muted"><%= payment.method %></div>
+                    <% if (payment.deposit_account) { %>
+                      <div class="text-muted">Cuenta: <%= payment.deposit_account %></div>
+                    <% } %>
+                    <% if (payment.screenshot_path) { %>
+                      <div>
+                        <a class="small" href="/uploads/<%= payment.screenshot_path %>" target="_blank">Ver comprobante</a>
+                      </div>
+                    <% } %>
+                  </li>
+                <% }) %>
+              </ul>
+            <% } else { %>
+              <p class="text-muted mb-0">Sin pagos registrados.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>
