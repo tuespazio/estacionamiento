@@ -1,0 +1,77 @@
+<%- include('../partials/header', { title }) %>
+<div class="mb-4">
+  <a class="btn btn-link" href="/admin/users">← Volver a vecinos</a>
+</div>
+<div class="row">
+  <div class="col-lg-5 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Agregar vehículo</div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label" for="license_plate">Placas</label>
+            <input class="form-control" id="license_plate" name="license_plate" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="make">Marca</label>
+            <input class="form-control" id="make" name="make" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="model">Modelo</label>
+            <input class="form-control" id="model" name="model" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="control_number">Número de control</label>
+            <input class="form-control" id="control_number" name="control_number" required />
+          </div>
+          <button class="btn btn-primary" type="submit">Agregar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Vehículos registrados</div>
+      <div class="card-body">
+        <% if (vehicles && vehicles.length) { %>
+          <div class="table-responsive">
+            <table class="table table-striped align-middle">
+              <thead>
+                <tr>
+                  <th>Placas</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>Número de control</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% vehicles.forEach((vehicle) => { %>
+                  <tr>
+                    <td><%= vehicle.license_plate %></td>
+                    <td><%= vehicle.make %></td>
+                    <td><%= vehicle.model %></td>
+                    <td><%= vehicle.control_number %></td>
+                    <td class="text-end">
+                      <form
+                        method="post"
+                        class="d-inline"
+                        action="/admin/users/<%= neighbor.id %>/vehicles/<%= vehicle.id %>/delete"
+                        onsubmit="return confirm('¿Deseas eliminar este vehículo?');"
+                      >
+                        <button class="btn btn-sm btn-danger" type="submit">Eliminar</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <p class="text-muted mb-0">No hay vehículos registrados.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer') %>

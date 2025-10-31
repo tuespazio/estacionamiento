@@ -1,0 +1,58 @@
+<%- include('partials/header', { title }) %>
+<div class="row">
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="card-title h4">Administración</h2>
+        <p class="card-text">
+          Gestiona vecinos, vehículos y pagos desde el panel administrativo.
+        </p>
+        <a class="btn btn-primary" href="/admin/users">Ir al panel</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 mb-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="card-title h4">Portal de vecinos</h2>
+        <p class="card-text">
+          Permite a los vecinos consultar sus vehículos registrados y el estado de sus pagos.
+        </p>
+        <a class="btn btn-outline-primary" href="/portal">Ingresar al portal</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">Vecinos recientes</div>
+  <div class="card-body">
+    <% if (neighbors && neighbors.length) { %>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Domicilio</th>
+              <th>Vehículos</th>
+              <th>Pagos registrados</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% neighbors.forEach((neighbor) => { %>
+              <tr>
+                <td><%= neighbor.first_name %> <%= neighbor.last_name %></td>
+                <td><%= neighbor.address %></td>
+                <td><%= neighbor.vehicle_count %></td>
+                <td><%= neighbor.payment_count %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <p class="text-muted mb-0">No hay vecinos registrados todavía.</p>
+    <% } %>
+  </div>
+</div>
+<%- include('partials/footer') %>
