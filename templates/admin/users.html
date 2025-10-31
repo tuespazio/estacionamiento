@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Administración de vecinos{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-5 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Alta de vecino</div>
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label class="form-label" for="first_name">Nombre</label>
+            <input class="form-control" id="first_name" name="first_name" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="last_name">Apellido</label>
+            <input class="form-control" id="last_name" name="last_name" required />
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="address">Domicilio</label>
+            <textarea class="form-control" id="address" name="address" rows="2" required></textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Guardar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-7 mb-4">
+    <div class="card h-100">
+      <div class="card-header">Vecinos registrados</div>
+      <div class="card-body">
+        {% if neighbors %}
+        <div class="table-responsive">
+          <table class="table table-striped align-middle">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Domicilio</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for neighbor in neighbors %}
+              <tr>
+                <td>{{ neighbor.first_name }} {{ neighbor.last_name }}</td>
+                <td>{{ neighbor.address }}</td>
+                <td class="text-nowrap">
+                  <a
+                    class="btn btn-sm btn-outline-secondary"
+                    href="{{ url_for('manage_vehicles', neighbor_id=neighbor.id) }}"
+                    >Vehículos</a
+                  >
+                  <a
+                    class="btn btn-sm btn-outline-secondary"
+                    href="{{ url_for('manage_payments', neighbor_id=neighbor.id) }}"
+                    >Pagos</a
+                  >
+                  <form
+                    class="d-inline"
+                    method="post"
+                    action="{{ url_for('delete_user', neighbor_id=neighbor.id) }}"
+                    onsubmit="return confirm('¿Eliminar este registro?');"
+                  >
+                    <button class="btn btn-sm btn-danger" type="submit">Baja</button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No hay vecinos registrados.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
